@@ -38,13 +38,17 @@ namespace PetAPI
         public void ConfigureServices(IServiceCollection services)
         {
             services.AddScoped<IPetRepository, PetRepository>();
-            services.AddDbContext<PetContext>(o => o.UseSqlite("Data source=pets.db"));
+            //services.AddDbContext<PetContext>(o => o.UseSqlite("Data source=pets.db"));
+
             services.AddControllers();
             services.AddSwaggerGen(c =>
             {
                 c.SwaggerDoc("v1", new Microsoft.OpenApi.Models.OpenApiInfo { Title = "PetAPI", Version = "v1" });
             }
             );
+
+            var connectionString = Configuration.GetConnectionString("DefaultConnection");
+            services.AddDbContext<PetContext>(o => o.UseSqlServer(connectionString));
 
         }
 
